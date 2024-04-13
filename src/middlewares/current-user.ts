@@ -6,7 +6,9 @@ interface UserPayload {
   email: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       currentUser?: UserPayload
@@ -20,9 +22,11 @@ export const currentUser = (req: Request, res: Response, next: NextFunction) => 
   }
 
   try {
-    const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as UserPayload
+    const payload = jwt.verify(req.session.jwt as string, process.env.JWT_KEY!) as UserPayload
     req.currentUser = payload
-  } catch (err) {}
+  } catch (err) {
+    console.log(err)
+  }
 
   next()
 }
